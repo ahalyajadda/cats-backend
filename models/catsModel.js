@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const catSchema = new mongoose.Schema(
   {
-    name: { type: String },
+    name: { type: String, required: true },
     visits: { type: Number },
     catImage: { type: String },
     nickNames: { type: String },
