@@ -2,9 +2,8 @@ import express from 'express';
 import Cat from '../models/catsModel.js';
 
 const catsRouter = express.Router();
-
+//creating a post
 catsRouter.post('/', async (req, res) => {
-  // console.log(req.body);
   try {
     const newCat = new Cat({
       name: req.body.catName,
@@ -19,17 +18,16 @@ catsRouter.post('/', async (req, res) => {
     res.send({ message: err });
   }
 });
-
+//fetching all cats info
 catsRouter.get('/fetchCatsinfo', async (req, res) => {
   try {
     const catsInfo = await Cat.find();
-    // console.log(catsInfo);
     res.send(catsInfo);
   } catch (err) {
     res.send({ message: err });
   }
 });
-
+//fetch cat info by id
 catsRouter.get('/:id', async (req, res) => {
   try {
     const catsInfo = await Cat.findById(req.params.id);
@@ -38,19 +36,21 @@ catsRouter.get('/:id', async (req, res) => {
     res.send({ message: err });
   }
 });
+//update  cate info
 catsRouter.put('/:id', async (req, res) => {
   try {
     const catsInfo = await Cat.findById(req.params.id);
-    catsInfo.name = req.body.catName;
-    catsInfo.visits = req.body.catClicks;
-    catsInfo.catImage = req.body.catImage;
-    catsInfo.catNicknames = req.body.catNicknames;
+    catsInfo.name = req.body.catName || catsInfo.name;
+    catsInfo.visits = req.body.catClicks || catsInfo.visits;
+    catsInfo.catImage = req.body.catImage || catsInfo.catImage;
+    catsInfo.nickNames = req.body.catNicknames || catsInfo.nickNames;
     await catsInfo.save();
     res.send(catsInfo);
   } catch (err) {
     res.send({ message: err });
   }
 });
+//update clicks and age
 catsRouter.patch('/updateCount/:id', async (req, res) => {
   try {
     const catsInfo = await Cat.findById(req.params.id);
@@ -59,7 +59,6 @@ catsRouter.patch('/updateCount/:id', async (req, res) => {
     catsInfo.catAge = req.body.catAge;
 
     await catsInfo.save();
-    console.log(catsInfo.catAge);
     res.send(catsInfo);
   } catch (err) {
     res.send({ message: err });
